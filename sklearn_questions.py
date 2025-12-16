@@ -174,7 +174,6 @@ class MonthlySplit(BaseCrossValidator):
     """
 
     def __init__(self, time_col='index'):
-        self.time_col = time_col
         """Initialize MonthlySplit with time column.
 
         Parameters
@@ -182,19 +181,13 @@ class MonthlySplit(BaseCrossValidator):
         time_col : str, default='index'
             Column name or 'index' to use for datetime splitting.
         """
+        self.time_col = time_col
 
     def __repr__(self):
+        """Return string representation of MonthlySplit."""
         return f"MonthlySplit(time_col='{self.time_col}')"
-        """Return string representation of MonthlySplit.
-
-        Returns
-        -------
-        str
-            String representation of the MonthlySplit object.
-        """
 
     def _get_times(self, X):
-        """Extract datetime series from DataFrame or index."""
         """Extract datetime series from DataFrame or index.
 
         Parameters
@@ -230,7 +223,6 @@ class MonthlySplit(BaseCrossValidator):
         return pd.Series(times)
 
     def get_n_splits(self, X, y=None, groups=None):
-        """Return the number of splitting iterations in the cross-validator."""
         """Return the number of splitting iterations in the cross-validator.
 
         Parameters
@@ -253,7 +245,6 @@ class MonthlySplit(BaseCrossValidator):
         return max(0, len(unique_periods) - 1)
 
     def split(self, X, y=None, groups=None):
-        """Generate indices to split data into training and test set."""
         """Generate indices to split data into training and test set.
 
         Parameters
