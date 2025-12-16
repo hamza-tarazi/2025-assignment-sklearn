@@ -175,12 +175,43 @@ class MonthlySplit(BaseCrossValidator):
 
     def __init__(self, time_col='index'):
         self.time_col = time_col
+        """Initialize MonthlySplit with time column.
+
+        Parameters
+        ----------
+        time_col : str, default='index'
+            Column name or 'index' to use for datetime splitting.
+        """
 
     def __repr__(self):
         return f"MonthlySplit(time_col='{self.time_col}')"
+        """Return string representation of MonthlySplit.
+
+        Returns
+        -------
+        str
+            String representation of the MonthlySplit object.
+        """
 
     def _get_times(self, X):
         """Extract datetime series from DataFrame or index."""
+        """Extract datetime series from DataFrame or index.
+
+        Parameters
+        ----------
+        X : DataFrame
+            Input data with datetime index or column.
+
+        Returns
+        -------
+        pd.Series
+            Series containing datetime values.
+
+        Raises
+        ------
+        ValueError
+            If X has no index or column, or if datetime column is invalid.
+        """
         if self.time_col == 'index':
             if not hasattr(X, 'index'):
                 raise ValueError('X has no index to use as datetime')
@@ -200,6 +231,22 @@ class MonthlySplit(BaseCrossValidator):
 
     def get_n_splits(self, X, y=None, groups=None):
         """Return the number of splitting iterations in the cross-validator."""
+        """Return the number of splitting iterations in the cross-validator.
+
+        Parameters
+        ----------
+        X : DataFrame
+            Input data with datetime index or column.
+        y : array-like, optional
+            Target values (unused).
+        groups : array-like, optional
+            Group labels (unused).
+
+        Returns
+        -------
+        int
+            Number of splits (n_months - 1).
+        """
         times = self._get_times(X)
         periods = times.dt.to_period('M')
         unique_periods = np.sort(np.unique(periods))
@@ -207,6 +254,22 @@ class MonthlySplit(BaseCrossValidator):
 
     def split(self, X, y=None, groups=None):
         """Generate indices to split data into training and test set."""
+        """Generate indices to split data into training and test set.
+
+        Parameters
+        ----------
+        X : DataFrame
+            Input data with datetime index or column.
+        y : array-like, optional
+            Target values (unused).
+        groups : array-like, optional
+            Group labels (unused).
+
+        Yields
+        ------
+        tuple
+            Tuple of (train_indices, test_indices) for each successive month.
+        """
         times = self._get_times(X)
         periods = times.dt.to_period('M')
         unique_periods = np.sort(np.unique(periods))
